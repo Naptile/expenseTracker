@@ -11,7 +11,7 @@ export default function Pagination ({currentPage,search,totalExpenses,expensesPe
     return(
         <div className="flex justify-center items-center p-2">
             <button
-            dissabled={currentPage === 1}
+            dissabled={(currentPage === 1).toString()}
             onClick={()=>setCurrentPage(currentPage -1)}
             className="px-4 py-2 bg-gray-400 hover:bg-gray-500 rounded disabled:opacity-5">
                 Prev 

@@ -16,6 +16,7 @@ import LoadingSpiner from "../components/LoadingSpinner";
 import NotFound from "../components/NotFound";
 import { useLoaderData } from "react-router-dom";
 import MonthlySpendingChart from "../components/MonthlySpendingChart";
+import BudgetCard from "../components/BudgetCard";
 export default function Dashboard(){
 
     const[expenses,setExpenses]= useState([]);
@@ -27,6 +28,20 @@ export default function Dashboard(){
     const[sortBy,setSortBy] = useState("newest");
     const[currentPage,setCurrentPage] = useState(1);
     const[loading,setLoading] = useState(false);
+    const[user,setUser] = useState(null);
+
+    const fetchUser = async() =>{
+        try {
+            const response = await api.get("/auth/me");
+            setUser(response.data);
+        } catch (error) {
+            toast.error(
+                error.response?.data?.message ||
+                "Failed to fetch user"
+            )
+            
+        }
+    }
     const fetchExpenses = async()=>{
         setLoading(true);
         try {
@@ -42,6 +57,7 @@ export default function Dashboard(){
     }
     useEffect(()=>{
         fetchExpenses();
+        fetchUser();
     },[]);
 
     const handleDelete= async(id)=>{
@@ -135,6 +151,11 @@ export default function Dashboard(){
                 <StatCard title={"🧾Transactions"} value={expenseCount} />
                 <StatCard title={"🔥Highest Expense"} value={`Ksh ${highestExpense.toLocaleString()}`}/>
                 <StatCard title={"This Month"} value={`Ksh ${thisMonthExpenses.toLocaleString()}`}/>
+                {user &&
+                 <BudgetCard budget={user.monthlyBudget} thisMonthExpenses={thisMonthExpenses} fetchUser={fetchUser} />
+                }
+                <ExpenseForm fetchExpenses={fetchExpenses} loading={loading} setLoading={setLoading}/>                      
+               
             </div>
 
             {loading &&(
@@ -151,8 +172,7 @@ export default function Dashboard(){
                         <SpendingRadaChart expenses={expenses}/>
                         <CategoryChart expenses={expenses}/> 
                         <MonthlySpendingChart expenses={expenses}/>
-                        <ExpenseForm fetchExpenses={fetchExpenses} loading={loading} setLoading={setLoading}/>                      
-                </div>
+                     </div>
 
             </div>           
            

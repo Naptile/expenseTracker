@@ -74,3 +74,42 @@ exports.loginUser = async(req,res)=>{
         res.status(500).json({error:error.message});        
     }
 };
+
+exports.updateBudget = async(req,res)=>{
+    try {
+        const {monthlyBudget} = req.body;
+        if(monthlyBudget === undefined){
+            res.status(400).json({
+                message:"Monthly Budget is required"
+            });
+        }
+
+        if(monthlyBudget < 0){
+            res.status(400).json({
+                Budget :"Cannot be negative"
+            });
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.user,
+            {monthlyBudget},
+            {new:true,runValidators:true}
+        ).select("-password");
+
+        if(!user){
+            res.status(404).json({
+                message:"User not found"
+            });
+        }
+
+        res.status(200).json({
+            message:"Monthly Budget updated successfully",
+            user
+        });
+    } catch (error) {
+        res.status(500).json({
+            message:error.message
+        });
+        
+    }
+}

@@ -76,7 +76,7 @@ export default function CategoryChart({expenses}){
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="text-center">
                         <p className="text-sm text-slate-500 ">Total Spending</p>
-                        <p text-2xl font-bold text-slate-800>Ksh {categoryTotal.toLocaleString()}</p>
+                        <p className=" text-2xl font-bold text-slate-800">Ksh {categoryTotal.toLocaleString()}</p>
                     </div>
                 </div>
             </div>
