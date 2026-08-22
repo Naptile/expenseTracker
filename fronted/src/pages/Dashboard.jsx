@@ -17,6 +17,7 @@ import NotFound from "../components/NotFound";
 import { useLoaderData } from "react-router-dom";
 import MonthlySpendingChart from "../components/MonthlySpendingChart";
 import BudgetCard from "../components/BudgetCard";
+import BudgetForm from "../components/BudgetForm";
 export default function Dashboard(){
 
     const[expenses,setExpenses]= useState([]);
@@ -29,7 +30,9 @@ export default function Dashboard(){
     const[currentPage,setCurrentPage] = useState(1);
     const[loading,setLoading] = useState(false);
     const[user,setUser] = useState(null);
+    const[budget,setBudget] = useState(0);
 
+    //fetch user
     const fetchUser = async() =>{
         try {
             const response = await api.get("/auth/me");
@@ -42,6 +45,8 @@ export default function Dashboard(){
             
         }
     }
+
+    //fetch Expenses
     const fetchExpenses = async()=>{
         setLoading(true);
         try {
@@ -55,10 +60,33 @@ export default function Dashboard(){
             setLoading(false);
         }
     }
+
+    //fetchBUdget
+
+    const fetchBudget = async() =>{
+        try {
+            const date = new Date();
+            const month = date.getMonth();
+            const year =date.getFullYear();
+            const response = await api.get("/budget",{
+                params:{
+                    month,
+                    year
+                }
+            });
+
+            setBudget(response.data.amount || 0);
+        } catch (error) {
+            toast.error(error.response?.data?.message || error.response?.data?.error || "Failed to fetch budget")
+        }
+    }
+
     useEffect(()=>{
         fetchExpenses();
         fetchUser();
+        fetchBudget();
     },[]);
+
 
     const handleDelete= async(id)=>{
         try {
@@ -75,11 +103,11 @@ export default function Dashboard(){
     };
 
     const totalAmount = expenses.reduce((acc,expense)=>acc + expense.amount,0 )
-
     const expenseCount = expenses.length;
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear()
+
     const thisMonthExpenses = expenses.filter((expense)=>{
     const expenseDate = new Date(expense.date);
         return(
@@ -152,7 +180,7 @@ export default function Dashboard(){
                 <StatCard title={"🔥Highest Expense"} value={`Ksh ${highestExpense.toLocaleString()}`}/>
                 <StatCard title={"This Month"} value={`Ksh ${thisMonthExpenses.toLocaleString()}`}/>
                 {user &&
-                 <BudgetCard budget={user.monthlyBudget} thisMonthExpenses={thisMonthExpenses} fetchUser={fetchUser} />
+                 <BudgetForm budget={budget} thisMonthExpenses={thisMonthExpenses} fetchBudget={fetchBudget} />
                 }
                 <ExpenseForm fetchExpenses={fetchExpenses} loading={loading} setLoading={setLoading}/>                      
                

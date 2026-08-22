@@ -1,14 +1,21 @@
 const Expense = require("../models/expense");
 
-exports.createExpense =async(req,res)=>{
+exports.createExpense =async(req,res,next)=>{
     try{
         const{title,description,category,amount,date} = req.body;
-        const expense = await  Expense.create({title,description,category,amount,date,user:req.user});        
+        const expense = await  Expense.create({
+            title,
+            description,
+            category,
+            amount,
+            date,
+            user:req.user
+        });        
         res.status(201).json({
             message:"Expense created successfully",
             expense});
     }catch(error){
-        res.status(400).json({error:error.message})
+        next(error);
     }
 };
 
@@ -17,7 +24,7 @@ exports.getExpense = async(req,res)=>{
         const expense = await Expense.find({user:req.user});
         res.status(200).json(expense);
     } catch (error) {
-        res.status(500).json({error:error.message});
+        next(error);
     }
 };
 
@@ -32,22 +39,32 @@ exports.getById =async(req,res)=>{
         }
         res.status(200).json(expense);
     }catch(error){
-        res.status(400).json({error:error.message})
+        next(error);
     }
 };
 
 exports.updateExpense = async(req,res) =>{
     try {
-        const updatedExpense = await Expense.findOneAndUpdate({
-                _id:req.params.id,
-                user:req.user
-            },                
-            req.body,            
-            {new:true,
-            runValidators:true
+const { title, description, category, amount, date } = req.body;
+
+        const updatedExpense = await Expense.findOneAndUpdate(
+            {
+                _id: req.params.id,
+                user: req.user
             },
-                       
+            {
+                title,
+                description,
+                category,
+                amount,
+                date
+            },
+            {
+                new: true,
+                runValidators: true
+            }
         );
+       
         if(!updatedExpense){
             return res.status(404).json({
                 message:"Expense not found"})
@@ -57,7 +74,7 @@ exports.updateExpense = async(req,res) =>{
             updatedExpense
         });
     } catch (error) {
-        res.status(500).json({error:error.message});
+        next(error)
     }
 };
 
@@ -80,6 +97,6 @@ exports.deleteExpense = async(req,res)=>{
             deletedExpense
         });
     } catch (error){
-        res.status(500).json({error:error.message});
+        next(error)
     }
 };

@@ -3,6 +3,7 @@ import api from "../services/api";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 export default function Navbar(){
+    const[time,setTime] = useState(new Date());
     const navigate = useNavigate();
     const handleLogOut = ()=>{    
            localStorage.removeItem("token");
@@ -22,7 +23,17 @@ export default function Navbar(){
 
     useEffect(()=>{
         fetchUser();
-    },[])
+         const timer = setInterval(()=>{
+            setTime(new Date());
+        },1000);
+        return () =>clearInterval(timer);
+    },[]);    
+
+    const hours = String(time.getHours()).padStart(2, "0");
+    const minutes = String(time.getMinutes()).padStart(2, "0");
+    const seconds = String(time.getSeconds()).padStart(2, "0");
+
+    
     return(
        
 
@@ -38,6 +49,13 @@ export default function Navbar(){
                     
                 </div>
                     
+                {/* Timer */}
+                <div>
+                    <h1 className="text-3xl font-mono text-blue-600">
+                        {hours}:{minutes}:{seconds}
+                    </h1>
+                </div>
+
                 {/* user section */}
                 <div className="flex items-center gap-3 ">
                     {/* user avatar */}
@@ -45,7 +63,7 @@ export default function Navbar(){
                         <>
                     <div className="hidden sm:flex w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 items-center justify-center text-white font-bold">
                         {user.name.charAt(0).toUpperCase()}
-                    </div>
+                    </div>                    
                         
                     {/* Greetings */}
                     <div className="hidden sm:block">
@@ -58,8 +76,10 @@ export default function Navbar(){
                     <button
                     onClick={handleLogOut}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors shadow-sm"
-                    >LogOut</button>
+                    >LogOut</button>                   
                 </div>
+
+                
 
             </div>
         </nav>
