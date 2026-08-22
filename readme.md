@@ -1,7 +1,3 @@
-Absolutely 🥳🔥. Since we're about to push the Expense Tracker to GitHub, this is the perfect time to give it a **proper portfolio-level README**, similar to what we did for your Student Management System.
-
-I'll structure it around what we've actually built so far — **not exaggerating features that aren't implemented yet**.
-
 # 💰 Expense Tracker
 
 A full-stack expense management application built with the **MERN stack**. The application allows users to securely manage their personal expenses, set monthly budgets, analyze spending patterns, and monitor their financial activity through an interactive dashboard.
