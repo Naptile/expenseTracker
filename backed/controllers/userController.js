@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-exports.registerUser =async(req,res)=>{
+exports.registerUser =async(req,res,next)=>{
     try{
         const{name,email,password} = req.body;
         const userExists= await User.findOne({email});
@@ -26,12 +26,12 @@ exports.registerUser =async(req,res)=>{
         }
         });
     }catch(error){
-        res.status(400).json({error:error.message});
+        next(error)
         }    
 
 };
 
-exports.getCurrentUser =async(req,res)=>{
+exports.getCurrentUser =async(req,res,next)=>{
     try {
         const user = await User.findById(req.user).select("-password");
 
@@ -42,14 +42,12 @@ exports.getCurrentUser =async(req,res)=>{
         }
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({
-            message:error.message
-        });
+        next(error)
     }
 }
 
 
-exports.loginUser = async(req,res)=>{
+exports.loginUser = async(req,res,next)=>{
     try {
         const{email,password} =req.body;
         const userExists = await User.findOne({email});
@@ -71,7 +69,7 @@ exports.loginUser = async(req,res)=>{
 
         res.status(200).json({message:"Login successful",token});
     } catch (error) {
-        res.status(500).json({error:error.message});        
+        next(error)        
     }
 };
 
@@ -107,9 +105,7 @@ exports.updateBudget = async(req,res)=>{
             user
         });
     } catch (error) {
-        res.status(500).json({
-            message:error.message
-        });
+        next(error)
         
     }
 }

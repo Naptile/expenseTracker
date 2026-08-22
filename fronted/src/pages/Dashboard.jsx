@@ -16,7 +16,6 @@ import LoadingSpiner from "../components/LoadingSpinner";
 import NotFound from "../components/NotFound";
 import { useLoaderData } from "react-router-dom";
 import MonthlySpendingChart from "../components/MonthlySpendingChart";
-import BudgetCard from "../components/BudgetCard";
 import BudgetForm from "../components/BudgetForm";
 export default function Dashboard(){
 
