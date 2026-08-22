@@ -51,7 +51,7 @@ export default function Navbar(){
                     
                 {/* Timer */}
                 <div>
-                    <h1 className="hidden sm:text-3xl font-mono text-blue-600">
+                    <h1 className="hidden sm:flex text-3xl font-mono text-blue-600">
                         {hours}:{minutes}:{seconds}
                     </h1>
                 </div>
