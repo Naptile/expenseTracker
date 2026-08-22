@@ -50,13 +50,13 @@ export default function Filter({
                             type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            className="bg-slate-100 px-2 py-2  rounded-lg outline-orange-600"
+                            className="bg-slate-100 px-2 py-2 text-slate-900 rounded-lg outline-orange-600"
                         />          
                         <input
                             type="date"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
-                            className="bg-slate-100 px-2  py-2 rounded-lg outline-orange-600"
+                            className="bg-slate-100 px-2 text-slate-900  py-2 rounded-lg outline-orange-600"
                         />
                
                 <div>
