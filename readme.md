@@ -12,10 +12,10 @@ The project was built with a strong focus on **authentication, authorization, re
 
 ## 🚀 Live Demo
 
-> Coming soon
+https://expense-tracker-beta-woad.vercel.app/
 
 ## 📂 Repository
-
+https://github.com/Naptile/expenseTracker.git
 ## 📸 Screenshots
 
 ### 🔐 Authentication
