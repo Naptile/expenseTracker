@@ -1,0 +1,6 @@
+```text
+User-agent: *
+Allow: /
+
+Sitemap:https://expense-tracker-beta-woad.vercel.app/sitemap.xml
+```
