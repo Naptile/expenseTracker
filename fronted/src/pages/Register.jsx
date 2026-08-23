@@ -2,6 +2,7 @@ import { useState } from "react"
 import api from "../services/api";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import LoadingSpiner from "../components/LoadingSpinner";
 export default function Register(){
     const[form,setForm]=useState({
         name:"",
@@ -10,15 +11,18 @@ export default function Register(){
         confirmPassword:""
     });
 
+    const[loading,setLoading] = useState(false);
+
     const navigate = useNavigate();
     const[showPassword,setShowPassword]=useState(false);
     const[showConfirmPassword,setShowConfirmPassword]=useState(false)
     const[error,setError]=useState("");
 
     const handleSubmit =async(e)=>{
+        e.preventDefault();
+        setLoading(true);
         try {
-            e.preventDefault();
-
+            
             if(form.password !==form.confirmPassword){
                 toast.error("Passwords do not match")
                 setError("Password do not match")
@@ -38,9 +42,18 @@ export default function Register(){
             toast.error(error.response?.data?.error || error.response?.data?.message ||"Registration Failed")
             setError(error.response?.data?.message);
         }
+        finally{
+            setLoading(false);
+        }
     };
 
-
+    {
+        loading&&(
+            <>
+            return <LoadingSpiner/>
+            </>
+        )
+    }
    
 
     
@@ -98,7 +111,7 @@ export default function Register(){
                         className=" px-6 py-2 w-full  rounded-xl  bg-gray-100 ring-green-600 hover:bg-gray-200 border-slate-200 focus:ring-2 focus:outline-none transition-colors"
                 />
                 <button 
-                type="button"
+                type="button"                
                 onClick={()=>setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 ">
                     👁️
@@ -107,8 +120,9 @@ export default function Register(){
 
                 <button 
                 type="submit"
+                dissabled={loading}
                 className="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white text-lg px-4 py-2 rounded-xl hover:bg-green-700 transition-colors">
-                    Register
+                    {loading? "Registering..." : "Register"}
                 </button>
                 <Link to="/">
                 Already have an account? <span className="text-blue-500">login</span>

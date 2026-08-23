@@ -2,11 +2,13 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
 import api from "../services/api";
 import { toast } from "react-toastify";
+import LoadingSpiner from "../components/LoadingSpinner";
 export default function Login(){
     const[form,setForm]=useState({
         email:"",
         password:""
     });
+    const[loading,setLoading] = useState(false);
 
     const[showPassword,setShowPassword]=useState(false)
     const[error,setError]=useState("");
@@ -14,6 +16,7 @@ export default function Login(){
 
     const handleSubmit =async(e)=>{
         e.preventDefault()
+        setLoading(true)
         try {
             
             const response = await api.post("/auth/login",form)
@@ -31,8 +34,17 @@ export default function Login(){
             toast.error(error.response?.data?.error || error.response?.data?.message ||"Login Failed")
             setError(error.response?.data?.message || error.response?.data?.error || error.message);
         }
+        finally{
+            setLoading(false)
+        }
         
     }
+    {loading&&(
+        <>
+        return <LoadingSpiner/>
+        </>
+        
+    )}
 
 
     return(
@@ -73,7 +85,9 @@ export default function Login(){
                 </button>                
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 rounded-xl px-6 text-lg text-white py-2 hover:bg-green-600 transition-colors">Login</button>
+                <button 
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 rounded-xl px-6 text-lg text-white py-2 hover:bg-green-600 transition-colors">{loading ?"signing in" :"Login"}</button>
                 <Link to={"/register"} className="px-2  hover:text-blue-500">Don't have an account ? <span className="text-blue-500 hover:text-slate-900">Register</span></Link>
             </form>
         </div>
