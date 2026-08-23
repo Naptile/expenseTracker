@@ -23,7 +23,7 @@ export default function Login(){
             const token= response.data.token
             localStorage.setItem("token",token);
 
-            toast.success("Login successful! Redirecting to Dashboard...")
+            toast.success("Login successful! Redirected to Dashboard...")
             setForm({
                  email:"",
                 password:""
@@ -87,7 +87,7 @@ export default function Login(){
 
                 <button 
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 rounded-xl px-6 text-lg text-white py-2 hover:bg-green-600 transition-colors">{loading ?"signing in" :"Login"}</button>
+                className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 rounded-xl px-6 text-lg text-white py-2 hover:bg-green-600 transition-colors">{loading ?"signing in.." :"Login"}</button>
                 <Link to={"/register"} className="px-2  hover:text-blue-500">Don't have an account ? <span className="text-blue-500 hover:text-slate-900">Register</span></Link>
             </form>
         </div>
